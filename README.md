@@ -22,7 +22,10 @@
 *   **Smart Query Suffix Filter**: Allows looking up cities with specific administrative or country codes (e.g. `"Miami, FL"`, `"Chennai, IN"`, or `"Paris, Texas"`), automatically resolving the most relevant location.
 *   **Unified Unit Switching**: Switch between metric and imperial systems (`°C` and `km/h` vs. `°F` and `mph`) instantly across all sections with a single header toggle.
 *   **Search History & Cache**: Saves your 5 most recent search queries in `localStorage` for rapid selection and retrieval, featuring individual deletion and clear-all operations.
-*   **One-Page Layout Optimization**: Configured to display all modules cleanly on a single screen without clipping or cropping, automatically shifting to a scrollable block on small viewports.
+*   **Mobile-First Responsive Layout & Tabs**: Optimized with iOS/Android viewport controls, dynamic safe-area insets, smooth momentum touch scrolling, and a dedicated mobile tab navigation bar (`All`, `Current`, `Hourly`, `7-Day`) so every section is instantly visible on phones of any screen size.
+*   **GPS Geolocation Support**: 1-tap "Use Current Location" button for immediate local weather retrieval via device coordinates.
+*   **Quick Destination Chips & Auto-Restore**: Instant 1-tap popular city buttons and automatic retrieval of your last viewed location on startup.
+*   **One-Page Layout Optimization**: Configured to display all modules cleanly on a single screen without clipping or cropping on desktop, automatically transforming into an elegant mobile experience on handheld devices.
 
 ---
 

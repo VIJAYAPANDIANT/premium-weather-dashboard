@@ -21,7 +21,7 @@
 }
 
 /* Base Reset */
-* {
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -29,8 +29,15 @@
     -webkit-font-smoothing: antialiased;
 }
 
+html {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
 body {
     min-height: 100vh;
+    min-height: 100dvh;
     color: var(--text-primary);
     background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #1e293b 100%);
     background-size: 400% 400%;
@@ -39,9 +46,9 @@ body {
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
-    overflow-y: auto; /* Fallback scroll if content exceeds screen */
     padding: 20px;
     transition: background var(--transition-speed) ease;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Dynamic Weather Backgrounds */
@@ -93,7 +100,8 @@ body.bg-thunder {
     width: 100%;
     max-width: 950px;
     height: calc(100vh - 40px);
-    max-height: 730px; /* Adjusted to fit the 170px hourly card */
+    height: calc(100dvh - 40px);
+    max-height: 730px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -119,6 +127,7 @@ body.bg-thunder {
     font-size: 2.2rem;
     color: #fbbf24;
     animation: spinSlow 20s linear infinite;
+    flex-shrink: 0;
 }
 
 @keyframes spinSlow {
@@ -146,6 +155,7 @@ body.bg-thunder {
     cursor: pointer;
     position: relative;
     user-select: none;
+    flex-shrink: 0;
 }
 
 .toggle-btn {
@@ -182,6 +192,7 @@ body.bg-thunder {
     padding: 4px 6px 4px 16px;
     box-shadow: var(--glass-shadow);
     transition: all 0.3s ease;
+    gap: 4px;
 }
 
 .weatherForm:focus-within {
@@ -192,7 +203,8 @@ body.bg-thunder {
 .search-icon {
     font-size: 1.4rem;
     color: var(--text-secondary);
-    margin-right: 10px;
+    margin-right: 6px;
+    flex-shrink: 0;
 }
 
 .cityInput {
@@ -212,18 +224,21 @@ body.bg-thunder {
     opacity: 0.7;
 }
 
-.clear-btn {
+.clear-btn, .location-btn {
     background: transparent;
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
     padding: 6px;
-    margin-right: 5px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.clear-btn {
     opacity: 0;
     pointer-events: none;
 }
@@ -233,9 +248,14 @@ body.bg-thunder {
     pointer-events: auto;
 }
 
-.clear-btn:hover {
+.clear-btn:hover, .location-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-primary);
+}
+
+.location-btn.locating {
+    color: var(--accent-color);
+    animation: spin 1s linear infinite;
 }
 
 .search-submit-btn {
@@ -243,7 +263,7 @@ body.bg-thunder {
     color: white;
     border: none;
     outline: none;
-    padding: 8px 20px;
+    padding: 8px 18px;
     font-size: 0.95rem;
     font-weight: 600;
     border-radius: var(--border-radius-sm);
@@ -252,6 +272,7 @@ body.bg-thunder {
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-shrink: 0;
 }
 
 .search-submit-btn:hover {
@@ -276,6 +297,7 @@ body.bg-thunder {
     transform: translateY(-10px);
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 20;
 }
 
 .history-dropdown.show {
@@ -311,6 +333,7 @@ body.bg-thunder {
 .history-list {
     max-height: 200px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .history-item {
@@ -348,7 +371,7 @@ body.bg-thunder {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
+    opacity: 0.6;
     transition: all 0.2s;
 }
 
@@ -359,6 +382,37 @@ body.bg-thunder {
 .delete-history-item:hover {
     background: rgba(244, 63, 94, 0.15);
     color: var(--danger-color);
+}
+
+/* Mobile Tabs Navigation (Hidden on desktop) */
+.mobile-tabs {
+    display: none;
+    padding: 4px;
+    border-radius: var(--border-radius-sm);
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: -4px;
+    flex-shrink: 0;
+}
+
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+}
+
+.tab-btn.active {
+    background: var(--accent-color);
+    color: var(--text-primary);
+    box-shadow: 0 2px 10px var(--accent-glow);
 }
 
 /* Dashboard Loading */
@@ -385,7 +439,7 @@ body.bg-thunder {
     to { transform: rotate(360deg); }
 }
 
-/* Dashboard Grid Layout */
+/* Dashboard Grid Layout (Desktop default) */
 .dashboard {
     display: none;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -400,10 +454,12 @@ body.bg-thunder {
     flex-direction: column;
     gap: 16px;
     height: 100%;
+    min-width: 0;
 }
 
 .dashboard-right {
     height: 100%;
+    min-width: 0;
 }
 
 /* Current Weather Card */
@@ -436,6 +492,7 @@ body.bg-thunder {
     font-weight: 700;
     letter-spacing: -0.5px;
     margin-bottom: 2px;
+    word-break: break-word;
 }
 
 .dateDisplay {
@@ -457,6 +514,7 @@ body.bg-thunder {
     line-height: 1;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
     animation: float 4s ease-in-out infinite;
+    flex-shrink: 0;
 }
 
 @keyframes float {
@@ -503,6 +561,7 @@ body.bg-thunder {
     align-items: center;
     gap: 6px;
     transition: background 0.3s;
+    min-width: 0;
 }
 
 .detail-cell:hover {
@@ -517,6 +576,7 @@ body.bg-thunder {
 .detail-cell-value {
     font-size: 0.95rem;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .detail-cell-label {
@@ -525,9 +585,10 @@ body.bg-thunder {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
-/* Hourly Forecast Section (Enlarged to 170px to prevent clipping) */
+/* Hourly Forecast Section */
 .card-hourly {
     padding: 16px 20px;
     height: 170px;
@@ -556,9 +617,10 @@ body.bg-thunder {
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
 }
 
-/* Custom Scrollbar */
 .hourly-timeline::-webkit-scrollbar {
     height: 5px;
 }
@@ -587,6 +649,7 @@ body.bg-thunder {
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .hourly-item-card:hover {
@@ -626,6 +689,7 @@ body.bg-thunder {
     padding-right: 4px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    -webkit-overflow-scrolling: touch;
 }
 
 .daily-list::-webkit-scrollbar {
@@ -641,7 +705,6 @@ body.bg-thunder {
     border-radius: 10px;
 }
 
-/* Flexbox rows to avoid hard clipping/overflow */
 .daily-item-card {
     display: flex;
     justify-content: space-between;
@@ -661,6 +724,7 @@ body.bg-thunder {
 
 .daily-day {
     flex: 1.2;
+    min-width: 0;
     font-size: 0.9rem;
     font-weight: 600;
     white-space: nowrap;
@@ -672,10 +736,12 @@ body.bg-thunder {
     flex: 0.4;
     font-size: 1.6rem;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .daily-desc {
     flex: 1.2;
+    min-width: 0;
     font-size: 0.8rem;
     color: var(--text-secondary);
     font-weight: 500;
@@ -693,6 +759,8 @@ body.bg-thunder {
     gap: 8px;
     font-size: 0.9rem;
     font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .daily-temp-max {
@@ -720,6 +788,7 @@ body.bg-thunder {
 .error-icon {
     font-size: 2rem;
     color: var(--danger-color);
+    flex-shrink: 0;
 }
 
 .error-text-container {
@@ -741,13 +810,13 @@ body.bg-thunder {
 
 /* Welcome Card (Initial state) */
 .welcome-card {
-    padding: 50px 30px;
+    padding: 40px 24px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 16px;
     flex: 1;
     animation: fadeIn 0.8s ease-out;
 }
@@ -771,8 +840,53 @@ body.bg-thunder {
 .welcome-desc {
     font-size: 0.9rem;
     color: var(--text-secondary);
-    max-width: 400px;
+    max-width: 440px;
     line-height: 1.5;
+}
+
+/* Quick Cities Container */
+.quick-cities {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.quick-cities-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 500px;
+}
+
+.chip-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip-btn:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 /* Fade in Animation */
@@ -787,8 +901,32 @@ body.bg-thunder {
     }
 }
 
-/* Height-based Viewport Guard (Adjusted to 770px to match larger container) */
-@media (max-height: 770px) {
+/* View Filtering Classes for Mobile Tabs */
+@media (max-width: 850px) {
+    .dashboard.view-current .card-hourly,
+    .dashboard.view-current .dashboard-right {
+        display: none !important;
+    }
+
+    .dashboard.view-hourly .card-main,
+    .dashboard.view-hourly .dashboard-right {
+        display: none !important;
+    }
+    .dashboard.view-hourly .card-hourly {
+        height: auto !important;
+    }
+
+    .dashboard.view-daily .dashboard-left {
+        display: none !important;
+    }
+    .dashboard.view-daily .dashboard-right {
+        display: block !important;
+        height: auto !important;
+    }
+}
+
+/* Height-based Viewport Guard (Desktop) */
+@media (min-width: 851px) and (max-height: 770px) {
     body {
         align-items: flex-start;
     }
@@ -801,41 +939,71 @@ body.bg-thunder {
 /* Responsive Breakpoints & Viewport Scroll Toggles */
 @media (max-width: 850px) {
     body {
+        min-height: 100vh;
+        min-height: 100dvh;
         height: auto;
         align-items: flex-start;
-        overflow-y: auto;
-        padding: 15px 10px;
+        padding: 14px 10px;
+        padding-top: max(14px, env(safe-area-inset-top));
+        padding-bottom: max(14px, env(safe-area-inset-bottom));
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
     }
     
     .app-container {
         height: auto;
         max-height: none;
+        gap: 12px;
+    }
+
+    .mobile-tabs {
+        display: flex;
     }
     
     .dashboard {
         grid-template-columns: 1fr;
         height: auto;
+        gap: 12px;
+    }
+
+    .dashboard-left,
+    .dashboard-right {
+        height: auto;
+        gap: 12px;
     }
     
     .card-main {
         height: auto;
+        padding: 18px 16px;
     }
     
+    .card-hourly {
+        padding: 14px 14px;
+        height: auto;
+        min-height: 155px;
+    }
+
     .card-daily {
         height: auto;
+        padding: 16px 14px;
     }
     
     .daily-list {
         height: auto;
+        max-height: none;
         overflow-y: visible;
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .app-brand h1 {
-        font-size: 1.3rem;
+        font-size: 1.35rem;
     }
-    
+
+    .brand-icon {
+        font-size: 1.8rem;
+    }
+
     .weatherForm {
         padding: 4px 6px 4px 12px;
     }
@@ -843,33 +1011,165 @@ body.bg-thunder {
     .cityInput {
         font-size: 0.95rem;
     }
-    
+
+    .search-icon {
+        font-size: 1.25rem;
+        margin-right: 4px;
+    }
+
     .search-submit-btn {
-        padding: 8px 14px;
+        padding: 7px 14px;
         font-size: 0.85rem;
     }
-    
+
     .card-main {
-        padding: 16px;
+        padding: 16px 14px;
     }
-    
+
     .cityDisplay {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
     }
-    
+
+    .weather-hero {
+        gap: 14px;
+        margin: 8px 0;
+    }
+
+    .weatherEmoji {
+        font-size: 3.5rem;
+    }
+
     .tempDisplay {
-        font-size: 3.2rem;
+        font-size: 3rem;
     }
-    
+
+    .descDisplay {
+        font-size: 1rem;
+    }
+
     .details-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding-top: 10px;
     }
-    
-    .detail-cell:nth-child(3) {
-        grid-column: span 2;
+
+    .detail-cell {
+        padding: 8px 4px;
+        gap: 4px;
     }
-    
+
+    .detail-cell-icon {
+        font-size: 1.2rem;
+    }
+
+    .detail-cell-value {
+        font-size: 0.85rem;
+    }
+
+    .detail-cell-label {
+        font-size: 0.62rem;
+    }
+
+    .hourly-item-card {
+        min-width: 62px;
+        padding: 8px 4px;
+        gap: 6px;
+    }
+
+    .hourly-emoji {
+        font-size: 1.5rem;
+    }
+
+    .hourly-temp {
+        font-size: 0.88rem;
+    }
+
+    .daily-item-card {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .daily-day {
+        font-size: 0.85rem;
+    }
+
+    .daily-emoji {
+        font-size: 1.4rem;
+    }
+
     .daily-desc {
         display: none;
+    }
+
+    .daily-temp-range {
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+
+    .welcome-card {
+        padding: 30px 16px;
+        gap: 12px;
+    }
+
+    .welcome-icon {
+        font-size: 2.8rem;
+    }
+
+    .welcome-title {
+        font-size: 1.3rem;
+    }
+
+    .welcome-desc {
+        font-size: 0.85rem;
+    }
+}
+
+/* Small mobile devices (iPhone SE, Galaxy A series, 320px - 380px) */
+@media (max-width: 380px) {
+    body {
+        padding: 8px 6px;
+    }
+
+    .app-brand h1 {
+        font-size: 1.15rem;
+    }
+
+    .brand-icon {
+        font-size: 1.5rem;
+    }
+
+    .toggle-btn {
+        padding: 3px 8px;
+        font-size: 0.78rem;
+    }
+
+    .weatherForm {
+        padding: 2px 4px 2px 8px;
+    }
+
+    .search-submit-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .cityDisplay {
+        font-size: 1.3rem;
+    }
+
+    .weatherEmoji {
+        font-size: 2.8rem;
+    }
+
+    .tempDisplay {
+        font-size: 2.5rem;
+    }
+
+    .detail-cell-value {
+        font-size: 0.78rem;
+    }
+
+    .tab-btn {
+        padding: 6px 2px;
+        font-size: 0.78rem;
     }
 }

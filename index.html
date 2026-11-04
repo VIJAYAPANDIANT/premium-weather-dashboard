@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Atmosphere - Premium Weather Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,9 +32,12 @@
         <section class="search-section">
             <form class="weatherForm" autocomplete="off">
                 <span class="material-symbols-rounded search-icon">search</span>
-                <input type="text" class="cityInput" id="cityInput" placeholder="Search for a city (e.g., London, Tokyo)..." required>
-                <button type="button" class="clear-btn" id="clearSearchBtn">
+                <input type="text" class="cityInput" id="cityInput" placeholder="Search for a city..." required>
+                <button type="button" class="clear-btn" id="clearSearchBtn" title="Clear input" aria-label="Clear input">
                     <span class="material-symbols-rounded">close</span>
+                </button>
+                <button type="button" class="location-btn" id="locationBtn" title="Use current location" aria-label="Use current location">
+                    <span class="material-symbols-rounded">my_location</span>
                 </button>
                 <button type="submit" class="search-submit-btn">
                     <span>Search</span>
@@ -67,8 +75,26 @@
         <div class="welcome-card glass-panel" id="welcomeCard">
             <span class="material-symbols-rounded welcome-icon">thermostat</span>
             <h2 class="welcome-title">Weather Dashboard</h2>
-            <p class="welcome-desc">Enter a city above or select a recent search to view real-time weather analytics, hourly insights, and 7-day forecasts.</p>
+            <p class="welcome-desc">Enter a city above or tap a quick destination to view real-time weather analytics, hourly insights, and 7-day forecasts.</p>
+            <div class="quick-cities" id="quickCities">
+                <span class="quick-cities-label">Popular Locations</span>
+                <div class="chips-container">
+                    <button type="button" class="chip-btn" data-city="London, GB">🇬🇧 London</button>
+                    <button type="button" class="chip-btn" data-city="New York, US">🇺🇸 New York</button>
+                    <button type="button" class="chip-btn" data-city="Tokyo, JP">🇯🇵 Tokyo</button>
+                    <button type="button" class="chip-btn" data-city="Chennai, IN">🇮🇳 Chennai</button>
+                    <button type="button" class="chip-btn" data-city="Paris, FR">🇫🇷 Paris</button>
+                </div>
+            </div>
         </div>
+
+        <!-- Mobile View Navigation Tabs (Visible on mobile only) -->
+        <nav class="mobile-tabs glass-panel" id="mobileTabs" aria-label="Dashboard views">
+            <button type="button" class="tab-btn active" data-tab="all">All</button>
+            <button type="button" class="tab-btn" data-tab="current">Current</button>
+            <button type="button" class="tab-btn" data-tab="hourly">Hourly</button>
+            <button type="button" class="tab-btn" data-tab="daily">7-Day</button>
+        </nav>
 
         <!-- Weather Dashboard Panel (Dynamic) -->
         <main class="dashboard" id="weatherDashboard">
