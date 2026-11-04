@@ -1,7 +1,5 @@
 <div align="center">
 
-  <img src="https://raw.githubusercontent.com/VIJAYAPANDIANT/premium-weather-dashboard/main/preview.png" alt="Atmosphere Banner" width="100%" onerror="this.style.display='none'"/>
-
   # 🌦️ Atmosphere
   ### Premium Glassmorphic Weather Dashboard & Atmospheric Intelligence Suite
 
